@@ -1,0 +1,53 @@
+"""
+Given a collection of numbers, nums, that might contain duplicates, return all possible unique permutations in any order.
+
+Example 1:
+
+  Input: nums = [1,1,2]
+  Output:
+  [[1,1,2],
+  [1,2,1],
+  [2,1,1]]
+
+Example 2:
+
+  Input: nums = [1,2,3]
+  Output: [[1,2,3],[1,3,2],[2,1,3],[2,3,1],[3,1,2],[3,2,1]]
+
+
+Problem Source: LeetCode
+
+Solution -> O(n * n!)
+"""
+
+class Solution:
+    def permuteUnique(self, nums: List[int]) -> List[List[int]]:
+        result = []
+        used = [False] * len(nums)
+        permutation = []
+
+        nums.sort()
+        def backtracking():
+            if len(permutation) == len(nums):
+                result.append(permutation[::])
+                return
+            
+            for i in range(len(nums)):
+                if used[i]:
+                    continue
+
+                if i > 0 and nums[i] == nums[i-1] and used[i-1] == False:
+                    continue
+
+                used[i] = True
+                permutation.append(nums[i])
+                
+                backtracking()
+
+                permutation.pop()
+                used[i] = False
+            
+            return
+        
+        backtracking()
+        return result
